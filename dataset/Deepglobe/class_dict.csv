@@ -1,0 +1,8 @@
+name,r,g,b
+urban_land,0,255,255
+agriculture_land,255,255,0
+rangeland,255,0,255
+forest_land,0,255,0
+water,0,0,255
+barren_land,255,255,255
+unknown,0,0,0
