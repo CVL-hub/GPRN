@@ -100,11 +100,11 @@ class SAM_pred(nn.Module):
         return low_masks, binary_mask
     
     
-    def forward(self, query_img, prediction, protos, origin_pred = None, points_mask=None, enhance_q = None):
+    def forward(self, query_img, prediction, origin_pred = None):
         # B,C, h, w = query_img.shape
         h, w = 400, 400
        
-        coords, labels= self.point_mask_slic(origin_pred, enhance_q) # best 
+        coords, labels= self.point_mask_slic(origin_pred) # best 
 
         with torch.no_grad():
         #     #-------------save_sam_img_feat------------------------- # save_sam_img_feat
@@ -191,7 +191,7 @@ class SAM_pred(nn.Module):
         return segments
     
 
-    def point_mask_slic(self, pred, enhance_q):
+    def point_mask_slic(self, pred):
         b = pred.shape[0]
         coords = []
         labels = []

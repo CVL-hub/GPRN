@@ -22,19 +22,19 @@ from extractmasks.my_transforms import MyResizeLongestSide
 class Config(object):
     dataset_name = "Pascal"
     use_gpu = True
-    gpu_id = "1"
-    model_type = "vit_h"
+    gpu_id = "0"
+    model_type = "vit_b"
     target_size = 50
     crop_n_layers = 1
     points_per_side = 32
     points_per_batch = 8
     stability_score_thresh = 0.9
     data_root = "./dataset/VOC2012/JPEGImages"
-    target_root = './pascal'
+    target_root = './test'
     data_sam_mask_name = "sam_mask_{}_t{}_p{}_s{}".format(
             model_type, target_size, points_per_side, 50) #int(stability_score_thresh * 100))
     # need to download from https://github.com/facebookresearch/segment-anything#model-checkpoints
-    pretrain_checkpoint = "../pretrained_model/SAM/sam_vit_h_4b8939.pth"
+    pretrain_checkpoint = "../pretrained_model/SAM/sam_vit_b_01ec64.pth"
     pass
 
     @staticmethod

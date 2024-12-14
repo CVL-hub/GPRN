@@ -1,4 +1,4 @@
-from model.GPRN import IFA_MatchingNet
+from model.GPRN import GPRN_Net
 from util.utils import count_params, set_seed, mIOU
 
 import argparse
@@ -149,7 +149,7 @@ def evaluate(model, SAM, dataloader, args):
             out_ls = model(img_s_list, mask_s_list, img_q, mask_q, qry_sam_masks, support_sam_masks)
             pred = torch.argmax(out_ls[0], dim = 1)
             if args.post_refine:
-                pred, _ = SAM(query_img = img_q, prediction = out_ls[0], origin_pred = out_ls[2], points_mask=None)
+                pred, _ = SAM(query_img = img_q, prediction = out_ls[0], origin_pred = out_ls[2])
                 pred = torch.argmax(pred, dim = 1)
 
         pred[pred == 1] = cls
@@ -168,13 +168,13 @@ def main():
     FSSDataset.initialize(img_size=400, datapath=args.data_root)
     testdataset,testloader = FSSDataset.build_dataloader(args.dataset, args.batch_size, 4, '0', 'val', args.shot)
 
-    model = IFA_MatchingNet(args.backbone, args.refine, args.shot, args)
+    model = GPRN_Net(args.backbone, args.refine, args.shot, args)
 
     ### Please modify the following paths with your model path if needed.
     if args.dataset == 'deepglobe':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = 'outdir/models/deepglobe/ifa/resnet50_1shot_avg_51.70.pth'
+                checkpoint_path = 'outdir/models/deepglobe/ifa/resnet50_1shot_avg_50.74.pth'
             if args.shot == 5:
                 checkpoint_path = '/home/shifengpeng/IFA-MGCL/outdir/models/fss/ifa/resnet50_1shot_82.12.pth'
     if args.dataset == 'isic':

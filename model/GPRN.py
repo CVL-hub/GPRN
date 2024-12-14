@@ -31,6 +31,8 @@ class GraphAttention(nn.Module):
         self.with_projection = h_dim is not None
         if self.with_projection:
             self.linear = nn.Linear(h_dim, h_dim)
+            # self.linear_k = nn.Linear(h_dim, h_dim)
+            # self.linear_v = nn.Linear(h_dim, h_dim)
 
     def forward(self, q_node, k_node, v_node):
         assert q_node.shape[0] == k_node.shape[0] and q_node.shape[
@@ -183,9 +185,6 @@ class GPRN_Net(nn.Module):
             out_1 = F.interpolate(out_1, size=(h, w), mode="bilinear", align_corners=True)
             supp_out_1 = F.interpolate(supp_out_1, size=(h, w), mode="bilinear", align_corners=True)
           
-
-
-
         else:
             if self.refine:
                 out_refine, out_1,FP_1, FP_2, out_0,BP_1= self.iter_BFP(FP, BP, feature_s_ls, feature_q, self.refine)
