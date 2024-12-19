@@ -1,6 +1,6 @@
 # [AAAI 2025] SAM-Aware Graph Prompt Reasoning Network for Cross-Domain Few-Shot Segmentation.
 
-Shi-Feng Peng，[Guolei Sun](https://scholar.google.ae/citations?user=qd8Blw0AAAAJ&hl=en), [Yong Li](https://scholar.google.com.hk/citations?user=HRBTJYYAAAAJ&hl=zh-CN) , [Hongsong Wang](https://scholar.google.com/citations?user=LzQnGacAAAAJ&hl=en) ,  [Guosen Xie](https://scholar.google.com/citations?user=LKaWa9gAAAAJ&hl=en).
+Shi-Feng Peng，[Guolei Sun](https://scholar.google.ae/citations?user=qd8Blw0AAAAJ&hl=en), [Yong Li](https://scholar.google.com.hk/citations?user=HRBTJYYAAAAJ&hl=zh-CN) , [Hongsong Wang](https://scholar.google.com/citations?user=LzQnGacAAAAJ&hl=en) ,  [Guo-Sen Xie](https://scholar.google.com/citations?user=LKaWa9gAAAAJ&hl=en).
 
 Welcome to the official PyTorch implementation repository of our paper SAM-Aware Graph Prompt Reasoning Network for Cross-Domain Few-Shot Segmentation, accepted to AAAI 2025.
 
