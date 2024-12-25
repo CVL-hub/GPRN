@@ -94,6 +94,7 @@ def parse_args():
     parser.add_argument("--weight",
                     type=float,
                     default= 0.1)
+    parser.add_argument('--post_refine', dest='post_refine', action='store_true', default=True)
     
     
    
@@ -116,7 +117,7 @@ def evaluate(model, SAM, dataloader, args):
 
     metric = mIOU(num_classes)
 
-    for i, (img_s_list, mask_s_list, img_q, mask_q, cls, _, id_q) in enumerate(tbar):
+    for i, (img_s_list, mask_s_list, img_q, mask_q, cls, _, id_q, qry_sam_masks, support_sam_masks) in enumerate(tbar):
 
         img_s_list = img_s_list.permute(1,0,2,3,4)
         mask_s_list = mask_s_list.permute(1,0,2,3)
@@ -187,11 +188,17 @@ def main():
     iters = 0
     total_iters = args.episode // args.batch_size
     lr_decay_iters = [total_iters // 3, total_iters * 2 // 3]
-    
-    previous_best = 0
+
     SAM = SAM_pred(args)
     SAM = SAM.cuda()
     SAM = SAM.eval()
+
+    model.eval()
+    set_seed(args.seed)
+    previous_best = evaluate(model, SAM, testloader, args)
+    best_model = deepcopy(model)
+    torch.save(best_model.module.state_dict(),
+                    os.path.join(save_path, '%s_%ishot_%.2f.pth' % (args.backbone, args.shot, previous_best)))
 
 
     # each snapshot is considered as an epoch
@@ -251,8 +258,9 @@ def main():
         model.eval()
         set_seed(args.seed)
         miou = evaluate(model, SAM, testloader, args)
+        torch.cuda.empty_cache()
 
-        if epoch >= 2:
+        if epoch >= 1:
             if miou >= previous_best:
                 best_model = deepcopy(model)
                 previous_best = miou
