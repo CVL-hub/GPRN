@@ -49,7 +49,7 @@ def parse_args():
                         help='number of support pairs')
     parser.add_argument('--episode',
                         type=int,
-                        default=24000,
+                        default=6000,
                         help='total episodes of training')
     parser.add_argument('--snapshot',
                         type=int,
@@ -193,12 +193,7 @@ def main():
     SAM = SAM.cuda()
     SAM = SAM.eval()
 
-    model.eval()
-    set_seed(args.seed)
-    previous_best = evaluate(model, SAM, testloader, args)
-    best_model = deepcopy(model)
-    torch.save(best_model.module.state_dict(),
-                    os.path.join(save_path, '%s_%ishot_%.2f.pth' % (args.backbone, args.shot, previous_best)))
+    previous_best = 0
 
 
     # each snapshot is considered as an epoch
@@ -237,8 +232,7 @@ def main():
             mask_s = mask_s.long()
         
             if args.refine:
-                loss = criterion(out_ls[0], mask_q) + criterion(out_ls[1], mask_q) + criterion(out_ls[2], mask_q) + criterion(out_ls[3], mask_s) * 0.2 + \
-                    criterion(out_ls[4], mask_s) * 0.4 
+                loss = criterion(out_ls[0], mask_q) + criterion(out_ls[1], mask_q) + criterion(out_ls[2], mask_q) + criterion(out_ls[3], mask_s) * 0.2
                     
             else:
                 loss = criterion(out_ls[0], mask_q) + criterion(out_ls[1], mask_q) + criterion(out_ls[2], mask_s) * 0.4
@@ -260,7 +254,7 @@ def main():
         miou = evaluate(model, SAM, testloader, args)
         torch.cuda.empty_cache()
 
-        if epoch >= 1:
+        if epoch >= 0:
             if miou >= previous_best:
                 best_model = deepcopy(model)
                 previous_best = miou

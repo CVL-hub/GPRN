@@ -174,27 +174,27 @@ def main():
     if args.dataset == 'deepglobe':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = 'outdir/models/deepglobe/ifa/resnet50_1shot_avg_50.74.pth'
+                checkpoint_path = ''
             if args.shot == 5:
-                checkpoint_path = '/home/shifengpeng/IFA-MGCL/outdir/models/fss/ifa/resnet50_1shot_82.12.pth'
+                checkpoint_path = ''
     if args.dataset == 'isic':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = 'outdir/models/isic/ifa/resnet50_1shot_avg_66.83.pth'
+                checkpoint_path = ''
             if args.shot == 5:
-                checkpoint_path = './outdir/models/isic/ifa/resnet50_1shot_avg_71.36.pth'
+                checkpoint_path = ''
     if args.dataset == 'lung':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = 'outdir/models/lung/ifa/resnet50_1shot_avg_86.96.pth'
+                checkpoint_path = ''
             if args.shot == 5:
-                checkpoint_path = '/home/shifengpeng/IFA-MGCL/outdir/models/fss/ifa/resnet50_1shot_82.12.pth'
+                checkpoint_path = ''
     if args.dataset == 'fss':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = 'outdir/models/fss/ifa/resnet50_1shot_avg_81.08.pth'
+                checkpoint_path = ''
             if args.shot == 5:
-                checkpoint_path = '/home/shifengpeng/IFA-MGCL/outdir/models/fss/ifa/resnet50_1shot_82.12.pth'
+                checkpoint_path = ''
 
 
 

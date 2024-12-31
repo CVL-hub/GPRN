@@ -20,7 +20,7 @@ import numpy as np
 torch.autograd.set_detect_anomaly(True)
 cv2.ocl.setUseOpenCL(False)
 cv2.setNumThreads(0)
-os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+# os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 
 
 def parse_args():
@@ -118,6 +118,7 @@ def parse_args():
     parser.add_argument('--vis', dest='vis', action='store_true', default=True)
     parser.add_argument('--second_refine', dest='second_refine', action='store_true', default=False)
     parser.add_argument('--post_refine', dest='post_refine', action='store_true', default=True)
+    parser.add_argument('--train', dest='train', action='store_true', default=True)
    
     
     
@@ -187,27 +188,27 @@ def main():
     if args.dataset == 'deepglobe':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = './outdir/models/deepglobe/resnet50_1shot_avg_44.40.pth'
+                checkpoint_path = 'outdir/models/deepglobe/resnet50_1shot_47.29.pth'
             if args.shot == 5:
-                checkpoint_path = './outdir/models/deepglobe/resnet50_5shot_avg_52.78.pth'
+                checkpoint_path = 'outdir/models/deepglobe/resnet50_1shot_47.29.pth'
     if args.dataset == 'isic':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = './outdir/models/isic/resnet50_1shot_avg_55.50.pth'
+                checkpoint_path = 'outdir/models/isic/resnet50_1shot_53.42.pth'
             if args.shot == 5:
-                checkpoint_path = './outdir/models/isic/resnet50_5shot_avg_62.60.pth'
+                checkpoint_path = 'outdir/models/isic/resnet50_1shot_53.42.pth'
     if args.dataset == 'lung':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = './outdir/models/lung/resnet50_1shot_avg_72.64.pth'
+                checkpoint_path = './outdir/models/lung/resnet50_1shot_79.09.pth'
             if args.shot == 5:
-                checkpoint_path = './outdir/models/lung/resnet50_5shot_avg_73.07.pth'
+                checkpoint_path = './outdir/models/lung/resnet50_1shot_79.09.pth'
     if args.dataset == 'fss':
         if args.backbone == 'resnet50':
             if args.shot == 1:
-                checkpoint_path = './outdir/models/fss/ifa/resnet50_1shot_82.90.pth'
+                checkpoint_path = ''
             if args.shot == 5:
-                checkpoint_path = './outdir/models/fss/resnet50_5shot_avg_79.37.pth'
+                checkpoint_path = ''
     
     miou = 0
     save_path = 'outdir/models/%s/%s' % (args.dataset, path_dir)
@@ -225,8 +226,9 @@ def main():
 
     print('Loaded model:', checkpoint_path)
 
-    # checkpoint = torch.load(checkpoint_path)
-    # model.load_state_dict(checkpoint)
+    if args.train:
+        checkpoint = torch.load(checkpoint_path)
+        model.load_state_dict(checkpoint)
     
 
     SAM = SAM_pred(args)
@@ -265,7 +267,7 @@ def main():
     exclude_file_list = set()
 
     # each snapshot is considered as an epoch
-    t = args.episode // args.snapshot
+    t = args.episode // args.snapshot if args.dataset != 'fss' else 1
     for epoch in range(t):
         
         print("\n==> Epoch %i, learning rate = %.5f\t\t\t\t Previous best = %.2f"
@@ -305,8 +307,7 @@ def main():
             mask_s = mask_s.long()
         
             if args.refine:
-                loss = criterion(out_ls[0], mask_q) + criterion(out_ls[1], mask_q) + criterion(out_ls[2], mask_q) + criterion(out_ls[3], mask_s) * 0.2 + \
-                    criterion(out_ls[4], mask_s) * 0.4 
+                loss = criterion(out_ls[0], mask_q) + criterion(out_ls[1], mask_q) + criterion(out_ls[2], mask_q) + criterion(out_ls[3], mask_s) * 0.2
                     
             else:
                 loss = criterion(out_ls[0], mask_q) + criterion(out_ls[1], mask_q) + criterion(out_ls[2], mask_s) * 0.4

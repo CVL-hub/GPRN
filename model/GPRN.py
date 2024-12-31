@@ -181,9 +181,6 @@ class GPRN_Net(nn.Module):
                 out_1, supp_out_1, new_FP, new_BP = self.iter_BFP(FP, BP, feature_s_ls, feature_q, self.refine)
             out_1 = F.interpolate(out_1, size=(h, w), mode="bilinear", align_corners=True)
             supp_out_1 = F.interpolate(supp_out_1, size=(h, w), mode="bilinear", align_corners=True)
-
-            out_1 = F.interpolate(out_1, size=(h, w), mode="bilinear", align_corners=True)
-            supp_out_1 = F.interpolate(supp_out_1, size=(h, w), mode="bilinear", align_corners=True)
           
         else:
             if self.refine:
@@ -213,8 +210,7 @@ class GPRN_Net(nn.Module):
 
             out_ls.append(self_out)
             out_ls.append(supp_out)
-            # iter = 1 (BFP)
-            out_ls.append(supp_out_1)
+
         out_ls.append(out_refine_origin)
         out_ls.append(out_0)
      
